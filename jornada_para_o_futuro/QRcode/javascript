@@ -1,0 +1,46 @@
+const qrcode = require('qrcode');
+const inquirer = require('inquirer');
+const fs = require('fs');
+
+/**
+ * Função principal para gerar o QR Code via Terminal
+ */
+async function gerarQRCodeEcommerce() {
+    console.log("--- Gerador de QR Code para E-commerce ---");
+
+    try {
+        const respostas = await inquirer.prompt([
+            {
+                type: 'input',
+                name: 'url',
+                message: 'Cole o link do produto (URL):',
+                validate: (input) => input.startsWith('http') ? true : 'Por favor, insira uma URL válida (começando com http/https).'
+            },
+            {
+                type: 'input',
+                name: 'filename',
+                message: 'Digite o nome do arquivo (ex: produto-01):',
+                default: 'qrcode-venda'
+            }
+        ]);
+
+        const arquivoFinal = `${respostas.filename}.png`;
+
+        // Gera o QR Code e salva como imagem PNG
+        await qrcode.toFile(arquivoFinal, respostas.url, {
+            color: {
+                dark: '#000000',  // Cor do QR Code (Preto)
+                light: '#FFFFFF'  // Cor do fundo (Branco)
+            },
+            width: 500
+        });
+
+        console.log(`\n✅ Sucesso! QR Code gerado: ${arquivoFinal}`);
+        console.log(`🔗 Link vinculado: ${respostas.url}`);
+
+    } catch (erro) {
+        console.error('❌ Erro ao gerar o QR Code:', erro);
+    }
+}
+
+gerarQRCodeEcommerce();
