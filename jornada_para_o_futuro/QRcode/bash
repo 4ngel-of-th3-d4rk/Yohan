@@ -1,0 +1,4 @@
+mkdir qr-generator-ecommerce
+cd qr-generator-ecommerce
+npm init -y
+npm install qrcode inquirer
